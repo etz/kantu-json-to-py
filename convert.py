@@ -4,7 +4,7 @@ command_list = []
 target_list = []
 value_list = []
 
-with open('file.json') as json_file:
+with open('file1.json') as json_file:
     data = json.load(json_file)
     for p in data['Commands']:
         #print('Command: ' + p['Command'])
@@ -18,7 +18,7 @@ with open('file.json') as json_file:
 def writeCommand(command):
     supported_commands = ["pause", "store", "storeEval", "storeValue", "open", \
     "csvRead", "csvSave", "deleteAllCookies", "type", "click", "if", "else", "echo", \
-    "comment"]
+    "comment", "gotoLabel", "clickAndWait", "label", "sourceSearch", "select"]
     if command not in supported_commands:
         print ("Gracefully exiting. " + command + " not supported.")
         f.close()
@@ -40,11 +40,12 @@ def writeCommand(command):
 
     #store
     elif command == "store":
-        pass
+        if "!" not in value_list[counter]:
+            f.write(value_list[counter] + " = " + target_list[counter])
     elif command == "storeEval":
-        pass
+        f.write(value_list[counter] + " = " + target_list[counter])
     elif command == "storeValue":
-        pass
+        f.write(value_list[counter] + " = " + target_list[counter])
 
     #open
     elif command == "open":
