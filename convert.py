@@ -15,7 +15,14 @@ with open('file.json') as json_file:
         value_list.append(p['Value'])
         #print('')
 
-def convertCommand(command):
+def writeCommand(command):
+    supported_commands = ["pause", "store", "storeEval", "storeValue", "open", \
+    "csvRead", "csvSave", "deleteAllCookies", "type", "click", "if", "else", "echo", \
+    "comment"]
+    if command not in supported_commands:
+        print ("Gracefully exiting. " + command + " not supported.")
+        f.close()
+        exit()
     value_length = ""
     #pause
     if command == "pause":
@@ -56,8 +63,14 @@ def convertCommand(command):
         pass
     elif command == "click":
         pass
-    elif command == "if":
+    elif command == "echo":
         pass
+    elif command == "if":
+        f.write(" " + target_list[counter] + ":")
+    elif command == "else":
+        f.write(":")
+    elif command == "comment":
+        f.write("#" + target_list[counter])
 
 
 
@@ -76,15 +89,12 @@ for command in command_list:
     #Writing non-if statements
     if command != "endif" and command != "if" and command != "else":
         f.write(nextLine*"    ")
-        if command == "pause":
-            convertCommand(command)
-        else:
-            f.write(command)
+        writeCommand(command)
         f.write("\n")
     #Writing if-like statements
     elif command == "if" or command == "else":
-        f.write(command + ":")
-        convertCommand(command)
+        f.write(command)
+        writeCommand(command)
         f.write("\n")
 
     #Indexing method
